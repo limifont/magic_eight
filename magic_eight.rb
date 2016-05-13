@@ -19,34 +19,37 @@
 	'Outlook not so good', 
 	'Very doubtful']
 
+@bonus_answers = @answers.clone
 
-def menu
+def menu(use_bonus_answers)
 	puts 'MAIN MENU'
 	puts '1. Ask a question!'
-	puts '2. See & edit responses'
-	puts '3. Reset'
-	puts '4. QUIT'
+	puts '2. QUIT'
+	
+	if (use_bonus_answers)
+		puts '3. RESET'
+	end	
+	
 	print "\nPlease select a menu option >"
 	menu_option = gets.strip.downcase
 
+
 	case menu_option
 	when '1'
-		wish
-	when '2'
-		puts "Now you can add your own questions"
-	when '3', 'reset'
-		puts "This will reset the program"
-	when '4', 'quit'
+		wish(use_bonus_answers)
+	when '2', 'quit'
 		abort('Thanks for using the Magic 8 Ball!')
+	when '3', 'reset'
+		menu(false)
 	else
 		puts "This is not a valid menu option"
-		menu
-	end
+		menu(use_bonus_answers)
+	end 
 end	
 
 
 # gets question/wish
-def wish
+def wish(use_bonus_answers)
 	while true
 		puts "In your heart of hearts, what is it that you wish to know? (enter 'back' to go back to the main menu)"
 		wish = gets.strip
@@ -60,47 +63,76 @@ def wish
 			puts "********************************************************************\n"
 			bonus
 		elsif wish.downcase == 'back' 
-			menu
-		else
-			answer
+			menu(use_bonus_answers)
+		elsif wish.downcase == 'why is nathan so cool?'
+			puts '\''
+			puts 'Because he is the best person on the whole planet earth.'
+			puts 'If you don\'t already know him, you should get to.'
+			puts '\''
+		elsif wish.downcase != 'quit'
+			answer(use_bonus_answers)
 		end
 	end
 end
 
-def answer
+
+def answer(use_bonus_answers) 
 	puts "\nShake, shake, shake!"
 	puts 'The Magic 8 Ball\'s answer is:'
-	puts @answers.sample
+	if use_bonus_answers
+		puts @bonus_answers.sample
+	else 
+		puts @answers.sample
+	end
 	puts "\n"
 end
 
 
 def bonus
-	puts 'What super special answer would you like to add'
-	puts '1. Add answers'
-	# puts '2. '
-	# bonus_select = gets.strip
-
-	# case bonus_select
-	# when condition
-		
-	# end
-end
+	while true	
+		puts 'What super special answer would you like to add?'
+		puts "\nEnter your answer:"
+		bonus_answer = gets.strip
 
 
+		if @answers.include?(bonus_answer)
+			puts 'Sorry, you\'ll have to input a new answer.'
+			puts 'This answer is already in the list.'
+			menu(true)
+		elsif bonus_answer == 'back'
+			menu(true)
+		elsif bonus_answer.downcase == 'quit'
+			abort('Thanks for using the Magic 8 Ball!')
+		else
+			@bonus_answers << bonus_answer
+			puts 'Would you like to add any more answers? (y/n)'
+			yes_or_no = gets.strip.downcase
 
-
-def main
-	menu
-	while true
-		menu
+			if yes_or_no == 'yes'
+				break
+			elsif yes_or_no == 'no'
+				menu(true)
+			end	
+		end
 	end
 end
 
 
 
+
+
+
+# def main
+# 	menu
+# 	while true
+# 		menu
+# 	end
+# end
+
+
+
 puts 'Welcome to the Magic 8 Ball!'
-main
+menu(false)
 
 
 
