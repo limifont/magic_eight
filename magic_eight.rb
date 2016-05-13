@@ -118,19 +118,6 @@ def bonus
 end
 
 
-
-
-
-
-# def main
-# 	menu
-# 	while true
-# 		menu
-# 	end
-# end
-
-
-
 puts 'Welcome to the Magic 8 Ball!'
 menu(false)
 
